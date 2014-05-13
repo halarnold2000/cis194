@@ -47,3 +47,6 @@ make week1
 ```
 cabal configure --enable-tests && cabal build && cabal test
 ```
+=======
+cis194
+======
