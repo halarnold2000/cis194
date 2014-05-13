@@ -35,23 +35,32 @@ toDigitsRev :: Integer -> [Integer]
 toDigitsRev n | n <= 0 = []
               | otherwise =  [last' n] ++ toDigitsRev  (allButLast n)
 
-doubleEveryOther :: [Integer]-> [Integer]
+doubleEveryOther :: [Integer] -> [Integer]
 doubleEveryOther [] = []
-doubleEveryOther (x:[]) = [x]
-doubleEveryOther all@(_:_:_) = let x = reverse all
-                               in reverse (doubleEveryOther' x) 
+doubleEveryOther [x] = [x]
+doubleEveryOther all@(x:y:zs)
+  | isEven (length' all) = [2*x, y] ++ doubleEveryOther zs 
+  | otherwise = x : [y*2, head zs] ++ doubleEveryOther (tail zs) 
 
+bigInt :: Int -> Integer
+bigInt = toInteger
 
-doubleEveryOther' :: [Integer] -> [Integer]
---doubleEveryOther' [] = []
---doubleEveryOther' (x:[]) = [x]
-doubleEveryOther' (x:y:zx) = [x, 2*y] ++ doubleEveryOther' zx
+length' :: [Integer]->Integer
+length' = bigInt . length 
+
+isEven :: Integer -> Bool
+isEven = (== 0) . (`mod` 2)
 
 sumDigits :: [Integer] -> Integer
-sumDigits _ = 0
+--sumDigits _ = 0
+sumDigits = sum . concat . map toDigits
+
+doubleDigits :: Integer -> [Integer] 
+doubleDigits = doubleEveryOther . toDigits
 
 validate :: Integer -> Bool
-validate _ = False
+validate  = isEven . sumDigits . concat . map toDigits . doubleDigits
+--validate _  = False
 
 ---------------------
 -- Towers of Hanoi --
