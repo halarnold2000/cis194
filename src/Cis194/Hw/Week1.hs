@@ -1,46 +1,43 @@
 module Cis194.Hw.Week1 where
+import Data.Char
 
 -------------
 -- Ex 1-4  --
 -------------
 
+
+digitToInteger :: Char->Integer
+digitToInteger = toInteger . digitToInt
+
 toDigits :: Integer -> [Integer]
 
---toDigits 0 = []
---toDigits x = if (x < 0) then [] else 
---             let last = last' x
---                 allbut = allButLast x
---             in (toDigits allbut)++ [last]
+-- | this is some comment
+-- >>> toDigits 1234
+-- [1,2,3,4]
 
---toDigits n = if (n <= 0) then  [] 
---             else
---               let last = last' n
---                   allbut = allButLast n
---               in (toDigits allbut) ++ [last]          
-
-toDigits n | n <= 0 = []
-           | otherwise = toDigits (n `div` 10) ++ [n `mod` 10]  
+toDigits n 
+           | n <= 0 = []
+           | n > 0  = map digitToInteger $ (show n)
 
 -- pick off last digit
 last' :: Integer -> Integer
-last' x = x `mod` 10
+last' = flip mod 10
 
 -- allButLast 
 allButLast :: Integer -> Integer
-allButLast x = x `div` 10 
+allButLast = flip div 10
 
 toDigitsRev :: Integer -> [Integer]
--- toDigitsRev = reverse . toDigits 
+toDigitsRev = reverse . toDigits
 
-toDigitsRev n | n <= 0 = []
-              | otherwise =  [last' n] ++ toDigitsRev  (allButLast n)
+-- | doublEveryOther:
+-- >>>  doubleEveryOther [8,7,6,5] 
+-- [16,7,12,5]
+-- >>> doubleEveryOther [1,2,3] 
+-- [1,4,3] 
 
 doubleEveryOther :: [Integer] -> [Integer]
-doubleEveryOther [] = []
-doubleEveryOther [x] = [x]
-doubleEveryOther all@(x:y:zs)
-  | isEven (length' all) = [2*x, y] ++ doubleEveryOther zs 
-  | otherwise = x : [y*2, head zs] ++ doubleEveryOther (tail zs) 
+doubleEveryOther n  = reverse (zipWith (*) (cycle [1,2]) (reverse n))
 
 bigInt :: Int -> Integer
 bigInt = toInteger
